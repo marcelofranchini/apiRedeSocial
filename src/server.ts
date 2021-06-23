@@ -17,7 +17,13 @@ app.use(routes);
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   if (err instanceof Error) {
-    return res.status(400).json({
+    let status: number = 400
+
+    if (err.message.indexOf('existe') !== -1) status = 409
+    if (err.message.indexOf('incorreto') !== -1) status = 404
+
+      
+    return res.status(status).json({
       error: err.message
     })
   }
